@@ -1,0 +1,159 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="de-ch">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>LinuxClimate project diary</title>
+</head>
+
+<body bgcolor="#FFFFCC">
+
+<div style="position: absolute; width: 712px; height: 2093px; z-index: 1; left: 44px; top: 139px" id="layer1">
+	<span style="font-size: 13pt">22. Sept 12: during the last two weeks, first 
+	I installed Technical Solution's eclipse IDE running arm-linux-gnu gcc 
+	crosstools under windows (not my idea, I would prefer using the IDE under 
+	linux). One needs to get used to Technical Solution's eclipse IDE and it is 
+	not satisfactory documented, but finally it worked. </span>
+	<p><span style="font-size: 13pt">I took over the whole growbox application, 
+	commented out all the interfaces to the OS and could easily compile and link 
+	it. Also I could let it run on the Technical Solution's linux board under 
+	debian linux. It was just printing out a &quot;Hello world&quot; message, but for a 
+	first test I was rather satisfied. In the last few days I implemented the OS 
+	threading-interface of the serial message receiver thread (not yet the com 
+	interface), exchanging the windows-thread methods with posix threads, what 
+	was rather straight-forward. By today, I could compile and link the posix 
+	thread calls. Test will follow tomorrow or on monday.</span><p>
+	<span style="font-size: 13pt">23. sept 12: threading tests ran&nbsp; ok and I 
+	started work on the serial communication</span><p>
+	<span style="font-size: 13pt">26. sept 12: picture of working place during 
+	serial comms test</span><p>
+	<img border="0" src="DSCF4615SelResized.jpg" width="638" height="480"><p>on 
+	the very right, the white stick on the black box is the upper part of the hygrosense 
+	temperature/humidity sensor, that sends its values via serial communication 
+	to the embedded linux board (at the left side of the notebook). The serial 
+	sgnal can also be seen on the oscilloscope who's probes are connected on the 
+	serial tester (between the linux board and the hygrosense sensor). On the 
+	notebook screen one can see an ssh terminal (connected via ip) showing the 
+	sensor values arriving on the linux board. On the right side of the hotebook 
+	lies the not yet connected relais board which later will control the 
+	humidity/drying and heating/cooling equipments.<p>27. sept 12: today the 
+	serial communication was tested ok. So as next I will work on the ini-file 
+	integration, using a simple library for embedded systems I found today on 
+	the internet (<a href="http://www.compuphase.com/minini.htm" target =_blank> 
+	http://www.compuphase.com/minini.htm</a> ).<p>28. sept 12: ini file methods 
+	tested ok, and meanwhile also NonPosixTimers are ready for testing. I could 
+	not use the posix timers, because I could not find anywhere on the delivered 
+	IDE-CD a lib file that supported the posix timer methods. There is a chaotic 
+	amount of lib files, and versions of them.... It is hard to work with this 
+	IDE and one can see, that it was not used so often by developers. But 
+	anyhow, I will try to continue with the delivered development toolchains and 
+	IDE with the goal to come to a working application as soon as possible. When 
+	once the application runs, I then will try to compile a library on my own 
+	and to integrate all the needed methods, but for now this would consume too 
+	much time and delay the solution for too long (&quot;time to market&nbsp; :-) . <p>
+	30. Sept 12: over the weekend I worked on the soap integration (
+	<a href="http://www.cs.fsu.edu/~engelen/soap.html" target = _blank>
+	http://www.cs.fsu.edu/~engelen/soap.html </a>) using gsoap with wich I made 
+	best experiences in the past (Siemens TTS). A first soap implementation is 
+	compilable and ready to test. Also GPIO (general purpose input/output 
+	{programming the signals of single pins on the chip}) controlling the relais-board is 
+	ready for testing. So now, to a big part, the implementation of the whole 
+	application is&nbsp; done, and mainly testing will follow, as well as web-UI 
+	integration.<p>
+	&nbsp;<p>
+	<img border="0" src="IMAG0488croResized.jpg" width="691" height="306"><p>
+	1<span style="font-size: 13pt">3. Okt 12: after two weeks holiday with my family in Italy, where I just 
+	did some works on the embedded linux software and also created a gsoap 
+	client application, now testing continues: Today I tested NonPosixTimers 
+	with success.</span><p>
+	<span style="font-size: 13pt">19. Oct 12: GPIO tested ok. I took a small 
+	movie:</span><p>
+	&nbsp;<p>
+	&nbsp;<p>
+	&nbsp;<p>
+	&nbsp;<p>
+	&nbsp;<p>
+	&nbsp;<p>
+	&nbsp;<p>
+	&nbsp;<p>
+	&nbsp;<div style="position: absolute; width: 438px; height: 331px; z-index: 1; left: 0px; top: 1728px" id="layer4">
+		&nbsp;<p>&nbsp;
+		
+		<object width="420" height="315">
+  <param name="movie" value="http://www.youtube.com/v/XoWypprkw9c">
+  </param>
+  <param name="wmode" value="transparent">
+  </param>
+  <embed src="http://www.youtube.com/v/XoWypprkw9c"
+  type="application/x-shockwave-flash" wmode="transparent"
+  width="420" height="315">
+  </embed>
+</object>
+
+		</div>
+	<p>
+	&nbsp;</div>
+<div style="position: absolute; width: 459px; height: 73px; z-index: 2; left: 44px; top: 31px" id="layer2">
+	<b><font size="6">LinuxClimate -project diary</font></b></div>
+<div style="position: absolute; width: 218px; height: 61px; z-index: 3; left: 37px; top: 4344px" 
+    id="layer3">
+	<span style="font-size: 13pt"><a href="LinuxClimateIndex.html">back to 
+	LinuxClimate index</a></span></div>
+<div style="position: absolute; width: 715px; height: 600px; z-index: 4; left: 44px; top: 2253px" 
+    id="layer5">
+	<div style="position: absolute; width: 717px; height: 933px; z-index: 1; left: -4px; top: 628px" id="layer6">
+		<span style="font-size: 13pt">As next the startup scripts have to be 
+		modified, so that the application starts up automatically after switch 
+		on or reset.</span><p><span style="font-size: 13pt">25. Oct 12: today I 
+		changed the startup-scripts, so that LinuxClimate application gets 
+		started automatically after power-on or reset. The application runs 
+		within TS-Linux, a much tiny and small real-time capable embedded linux 
+		kernel. It takes about 5 seconds after switch-on for the application to get 
+		up and running. The stdout output of the application&nbsp; is currently 
+		being written into system console.</span></p>
+		<p><span style="font-size: 13pt">console output:</span></p>
+		<p><img border="0" src="console.jpg" width="828" height="734"></div>
+	<span style="font-size: 13pt">22. Oct 12: Today gsoap could be tested 
+	successfully, and also the remote UI works well. More extensions to this UI 
+	will be added while further developing all the rest.<br />
+    <br />
+    23. Oct 23: After I tested all the different parts, today I &quot;plugged&quot; together 
+    the whole application and it run perfectly well. Now it can be used to control the 
+    climate within a grow room or grow box. </span>
+	<p><span style="font-size: 13pt">I took a screen capture of the gsoap remote 
+	UI:</span></p>
+	<p><img border="0" src="climatui.jpg" width="599" height="452"></div>
+<div style="position: absolute; width: 825px; height: 505px; z-index: 5; left: 38px; top: 3820px" id="layer7">
+	<span style="font-size: 13pt">one can see the LinuxClimate application's 
+	output, the order of startup and eventual failures or resource conflicts.</span><p>&nbsp;</p>
+	<p><span style="font-size: 13pt">10. Jan 2013: during December, I did 
+	extensive tests with the application. It worked rather well except that the 
+	board itself does not work on a stable level. It is simply low quality, that 
+	crashed during tests with any configuration of loaded program components 
+	(eg. fsm-implementation, Soapserver, hygrosense interface, console 
+	logger....). When it crashed, most often the os just was blocked completely, 
+	what makes debugging difficult. Sometimes also it reset itself.&nbsp; 
+	Sometimes it worked 4 hours before crashing, next time it stopped working already after 5 
+	minutes ....just randomly. It was an awful testing.</span></p>
+	<p><span style="font-size: 13pt">As consequence I ordered today a very much 
+	proven </span><font style="font-size: 13pt"><span itemprop="description">
+	AT91SAM9M10-EKES from one of my favorite mcu manufacturer ATMEL. I plan to 
+	use qnx to compile my application and test it on this board.</span></font><p>
+	<span style="font-size: 13pt">25. Feb 2013: five days ago I started working 
+	with qnx on a AT91SAM9M10-ek board. QNX is simply great, so far works 
+	without problems and everything one need to know is well documented. Now I 
+	will start transferring my LinuxClimate application to qnx.</span><p>3. Mar 
+	2013: <span style="font-size: 13pt">after a few hours of reading qnx docus, 
+	and after successful fights against the qnx compiler and linker, who 
+	sometimes loose references to methods&nbsp; (google confirmed me that I was 
+	not the first with this problem) - finally - at the end, I was surprisingly 
+	astonished how good remote debugging and running the code on the 
+	AT91SAM9M10-EK worked -- just state of the art ! By now, I already tested 
+	the main-thread and all the gsoap remote UI-code, and all this worked 
+	perfectly well. </span>
+	<p>&nbsp;</div>
+<p>&nbsp;</p>
+
+</body>
+
+</html>

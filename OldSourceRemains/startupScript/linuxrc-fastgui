@@ -1,0 +1,84 @@
+#!/bin/sh
+# Copyright (c) 2007, Technologic Systems.
+# All rights reserved.
+#
+# Uses initrd as root filesystem and drops to shell-- on exit of serial shell,
+# real Linux is booted.  Ethernet is configured as 192.168.0.50 and telnet
+# server is run.  If a USB device is present, it is checked for the presence
+# of an auto-update script "/tsinit", which is then run.
+
+export PATH=/bin:/sbin:/lbin:/mnt/root/bin:/mnt/root/sbin:/mnt/root/usr/bin:/mnt/root/usr/sbin:/mnt/root/usr/local/bin:/mnt/root/usr/local/sbin
+export LD_LIBRARY_PATH=/lib:/usr/lib
+export CONSOLE=/dev/ttyAM0
+export DISPLAY=:0.0
+
+ts7390-init-fastgui >/dev/null 2>&1 </dev/null &
+setconsole $CONSOLE
+stty -F $CONSOLE ospeed 115200 > /dev/null 2>&1
+check-usb-update >/dev/null 2>&1 </dev/null &
+
+export BOOTTIME=`eptime`
+
+(
+  peekpoke 16 0x600ff0d6 0x3
+
+  insmod /ts7000_nand.ko
+  insmod /tssdcard.ko
+  insmod /xuart7350.ko
+  insmod /tsuart1.ko
+  insmod /tsuart7350.ko
+ 
+  mount -t proc none /proc
+  mount -t sysfs none /sys
+  mount -t tmpfs none /dev
+  mkdir /dev/pts /dev/shm
+  mount -t devpts none /dev/pts
+  mount -t tmpfs none /dev/shm
+
+  mdev -s
+
+  if [ -e /dev/tssdcarda4 -a -e /mnt/root/notrootfs ]; then
+    mount -o ro /dev/tssdcarda4 /mnt/root
+    fsck /dev/tssdcarda4
+  fi
+  if [ -e /dev/mtdblock3 -a -e /mnt/root/notrootfs ]; then
+    mount -t yaffs2 -o ro /dev/mtdblock3 /mnt/root
+  fi
+
+  hostname ts7000
+  ifconfig lo 127.0.0.1 up
+  route add -net 127.0.0.0 netmask 255.0.0.0 lo
+  ifconfig eth0 192.168.1.50 up
+  #route add default gateway 192.168.1.1 eth0
+  /sbin/telnetd
+  echo ">> starting LinuxClimate please wait" > $CONSOLE;
+  cd /mnt/root/home/eclipse/
+  pwd > $CONSOLE;
+#  ./LinuxClimate  > $CONSOLE;
+  cd /
+) > /dev/null 2>&1 &
+
+
+( 
+  export ENV=/shinit
+  exec /bin/sh -i < $CONSOLE > $CONSOLE 2>&1
+)
+wait
+
+if [ -e /mnt/root/sbin/init ]; then
+  echo "Loading Debian..." > /dev/tty1
+  killall busybox telnetd lite_ts_fastgui > /dev/null 2>&1
+ 
+  grep -e '/dev/mtdblock3 /mnt/root' /proc/mounts > /dev/null 2>&1
+  if [ "$?" -eq 0 ]; then echo ">> Booting Linux (using onboard Flash)..." > $CONSOLE; fi
+  grep -e '/dev/tssdcarda4 /mnt/root' /proc/mounts > /dev/null 2>&1
+  if [ "$?" -eq 0 ]; then echo ">> Booting Linux (using SD Card)..." > $CONSOLE; fi
+
+  fsck /dev/tssdcarda4 > /dev/null 2>&1
+  cd /mnt/root
+  pivot_root . ./initrd
+  ./bin/mount -n --move ./initrd/sys ./sys
+  ./bin/mount -n --move ./initrd/proc ./proc
+  exec ./usr/sbin/chroot . ./sbin/init < .$CONSOLE > .$CONSOLE 2>&1
+fi
+
